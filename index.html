@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bé Học Tiếng Anh Vui Nhộn - GLS 1 (Unit 1-4)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background: linear-gradient(135deg, #f0fdf4 0%, #eff6ff 50%, #fef3c7 100%);
+            min-height: 100vh;
+        }
+        .bouncing {
+            animation: bounce 1.5s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .pop-in {
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <!-- App Container -->
+    <div id="app" class="max-w-4xl mx-auto px-4 py-6">
+        
+        <!-- Header -->
+        <header class="bg-white/90 backdrop-blur-md rounded-3xl shadow-lg p-4 mb-6 flex flex-wrap justify-between items-center border-4 border-amber-300">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="goToHome()">
+                <div class="w-12 h-12 bg-gradient-to-tr from-yellow-400 to-amber-500 rounded-2xl flex items-center justify-center text-white text-2xl shadow-md transform rotate-6">
+                    ⭐
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold text-indigo-600">English Kids Fun! 🎒</h1>
+                    <p class="text-xs text-slate-500">GLS 1 (Unit 1 - Unit 4)</p>
+                </div>
+            </div>
+
+            <!-- Score & Progress -->
+            <div class="flex items-center space-x-3 mt-2 sm:mt-0">
+                <div class="bg-amber-100 border-2 border-amber-300 px-4 py-1.5 rounded-full flex items-center space-x-2 shadow-inner">
+                    <span class="text-xl">⭐</span>
+                    <span id="star-count" class="font-bold text-amber-600 text-lg">0</span>
+                </div>
+                <button onclick="goToHome()" class="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold px-4 py-2 rounded-2xl shadow transition transform hover:scale-105 active:scale-95 text-sm">
+                    🏠 Trang chủ
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main id="main-content">
+            <!-- Dynamic content will be injected here -->
+        </main>
+    </div>
+
+    <!-- Message Modal / Feedback -->
+    <div id="modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 hidden z-50">
+        <div id="modal-content" class="bg-white rounded-3xl p-6 max-w-sm w-full text-center shadow-2xl border-4 border-indigo-200 pop-in">
+            <div id="modal-icon" class="text-6xl mb-3">🎉</div>
+            <h3 id="modal-title" class="text-2xl font-bold text-indigo-600 mb-2">Tuyệt vời!</h3>
+            <p id="modal-message" class="text-slate-600 mb-6">Bé trả lời chính xác rồi!</p>
+            <button onclick="closeModal()" class="w-full bg-gradient-to-r from-green-400 to-emerald-500 hover:from-green-500 hover:to-emerald-600 text-white font-bold py-3 px-6 rounded-2xl shadow-lg transform transition active:scale-95 text-lg">
+                Tiếp tục học 🚀
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE FOR UNITS 1-4 ---
+        const unitsData = [
+            {
+                id: 1,
+                title: "Unit 1: In the School Playground",
+                icon: "⚽",
+                bgGradient: "from-blue-400 to-indigo-500",
+                lightBg: "bg-blue-50",
+                borderColor: "border-blue-200",
+                vocabulary: [
+                    { word: "ball", vietnamese: "Quả bóng", icon: "⚽" },
+                    { word: "bike", vietnamese: "Xe đạp", icon: "🚲" },
+                    { word: "book", vietnamese: "Cuốn sách", icon: "📖" },
+                    { word: "bag", vietnamese: "Cặp sách", icon: "🎒" }
+                ],
+                sentences: [
+                    { text: "Hello, I am a student.", vietnamese: "Xin chào, tôi là học sinh." },
+                    { text: "Goodbye, bye.", vietnamese: "Tạm biệt." }
+                ],
+                exercises: {
+                    missingLetter: [
+                        { full: "bike", prefix: "bi", missing: ["k", "e"], suffix: "" },
+                        { full: "book", prefix: "boo", missing: ["k"], suffix: "" },
+                        { full: "bag", prefix: "b", missing: ["a", "g"], suffix: "" },
+                        { full: "ball", prefix: "ba", missing: ["l", "l"], suffix: "" }
+                    ],
+                    unscramble: [
+                        { scrambled: "llba", correct: "ball", hint: "Quả bóng", icon: "⚽" },
+                        { scrambled: "kibe", correct: "bike", hint: "Xe đạp", icon: "🚲" },
+                        { scrambled: "kobo", correct: "book", hint: "Cuốn sách", icon: "📖" },
+                        { scrambled: "gab", correct: "bag", hint: "Cặp sách", icon: "🎒" }
+                    ]
+                }
+            },
+            {
+                id: 2,
+                title: "Unit 2: In the Dining Room",
+                icon: "🍰",
+                bgGradient: "from-pink-400 to-rose-500",
+                lightBg: "bg-pink-50",
+                borderColor: "border-pink-200",
+                vocabulary: [
+                    { word: "cake", vietnamese: "Chiếc bánh", icon: "🎂" },
+                    { word: "car", vietnamese: "Xe ô tô đồ chơi", icon: "🚗" },
+                    { word: "cat", vietnamese: "Chú mèo", icon: "🐱" },
+                    { word: "cup", vietnamese: "Cái cốc", icon: "🍵" }
+                ],
+                sentences: [
+                    { text: "I have a cat.", vietnamese: "Tôi có một chú mèo." },
+                    { text: "I have a car.", vietnamese: "Tôi có một chiếc ô tô." },
+                    { text: "I have a cake.", vietnamese: "Tôi có một chiếc bánh." },
+                    { text: "I have a cup.", vietnamese: "Tôi có một cái cốc." }
+                ],
+                exercises: {
+                    missingLetter: [
+                        { full: "cake", prefix: "", missing: ["c"], suffix: "ake" },
+                        { full: "car", prefix: "c", missing: ["a"], suffix: "r" },
+                        { full: "cat", prefix: "c", missing: ["a"], suffix: "t" },
+                        { full: "cup", prefix: "cu", missing: ["p"], suffix: "" }
+                    ],
+                    unscramble: [
+                        { scrambled: "ekac", correct: "cake", hint: "Chiếc bánh", icon: "🎂" },
+                        { scrambled: "rac", correct: "car", hint: "Xe ô tô", icon: "🚗" },
+                        { scrambled: "tac", correct: "cat", hint: "Chú mèo", icon: "🐱" },
+                        { scrambled: "puc", correct: "cup", hint: "Cái cốc", icon: "🍵" }
+                    ]
+                }
+            },
+            {
+                id: 3,
+                title: "Unit 3: At the Street Market",
+                icon: "🍎",
+                bgGradient: "from-amber-400 to-orange-500",
+                lightBg: "bg-amber-50",
+                borderColor: "border-amber-200",
+                vocabulary: [
+                    { word: "apple", vietnamese: "Quả táo", icon: "🍎" },
+                    { word: "bag", vietnamese: "Cặp sách", icon: "🎒" },
+                    { word: "can", vietnamese: "Chiếc lon", icon: "🥫" },
+                    { word: "hat", vietnamese: "Chiếc mũ", icon: "🧢" }
+                ],
+                sentences: [
+                    { text: "I have an apple.", vietnamese: "Tôi có một quả táo." },
+                    { text: "This is a bag.", vietnamese: "Đây là một chiếc cặp." },
+                    { text: "I have a can.", vietnamese: "Tôi có một chiếc lon." }
+                ],
+                exercises: {
+                    missingLetter: [
+                        { full: "apple", prefix: "a", missing: ["p"], suffix: "ple" },
+                        { full: "bag", prefix: "b", missing: ["a"], suffix: "g" },
+                        { full: "can", prefix: "c", missing: ["a"], suffix: "n" },
+                        { full: "hat", prefix: "h", missing: ["a"], suffix: "t" }
+                    ],
+                    unscramble: [
+                        { scrambled: "elppa", correct: "apple", hint: "Quả táo", icon: "🍎" },
+                        { scrambled: "gab", correct: "bag", hint: "Cặp sách", icon: "🎒" },
+                        { scrambled: "nac", correct: "can", hint: "Chiếc lon", icon: "🥫" },
+                        { scrambled: "tah", correct: "hat", hint: "Chiếc mũ", icon: "🧢" }
+                    ]
+                }
+            },
+            {
+                id: 4,
+                title: "Unit 4: In the Bedroom",
+                icon: "🛏️",
+                bgGradient: "from-purple-400 to-violet-600",
+                lightBg: "bg-purple-50",
+                borderColor: "border-purple-200",
+                vocabulary: [
+                    { word: "dog", vietnamese: "Con chó", icon: "🐶" },
+                    { word: "duck", vietnamese: "Con vịt", icon: "🦆" },
+                    { word: "door", vietnamese: "Cái cửa", icon: "🚪" },
+                    { word: "desk", vietnamese: "Bàn học", icon: "🪑" }
+                ],
+                sentences: [
+                    { text: "I have a dog.", vietnamese: "Tôi có một con chó." },
+                    { text: "This is a desk.", vietnamese: "Đây là một cái bàn học." },
+                    { text: "This is a door.", vietnamese: "Đây là một cái cửa." }
+                ],
+                exercises: {
+                    missingLetter: [
+                        { full: "dog", prefix: "d", missing: ["o", "g"], suffix: "" },
+                        { full: "duck", prefix: "du", missing: ["c", "k"], suffix: "" },
+                        { full: "door", prefix: "do", missing: ["o"], suffix: "r" },
+                        { full: "desk", prefix: "de", missing: ["s", "k"], suffix: "" }
+                    ],
+                    unscramble: [
+                        { scrambled: "god", correct: "dog", hint: "Con chó", icon: "🐶" },
+                        { scrambled: "kcud", correct: "duck", hint: "Con vịt", icon: "🦆" },
+                        { scrambled: "rood", correct: "door", hint: "Cái cửa", icon: "🚪" },
+                        { scrambled: "ksed", correct: "desk", hint: "Bàn học", icon: "🪑" }
+                    ]
+                }
+            }
+        ];
+
+        // Global State
+        let currentStars = parseInt(localStorage.getItem('kids_english_stars') || '0');
+        updateStarDisplay();
+
+        function addStars(amount) {
+            currentStars += amount;
+            localStorage.setItem('kids_english_stars', currentStars);
+            updateStarDisplay();
+        }
+
+        function updateStarDisplay() {
+            document.getElementById('star-count').innerText = currentStars;
+        }
+
+        // Tối ưu hóa phát âm tương thích tốt trên điện thoại
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                setTimeout(() => {
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'en-US';
+                    utterance.rate = 0.85;
+                    window.speechSynthesis.speak(utterance);
+                }, 50);
+            }
+        }
+
+        function showModal(title, message, icon = '🎉') {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-message').innerText = message;
+            document.getElementById('modal-icon').innerText = icon;
+            document.getElementById('modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.add('hidden');
+        }
+
+        // --- RENDER HOMEPAGE ---
+        function goToHome() {
+            const main = document.getElementById('main-content');
+            let html = `
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-indigo-700 mb-2">Chọn Chủ Đề Học Tập 🌟</h2>
+                    <p class="text-slate-600 text-lg">Cùng bé khám phá các từ vựng và mẫu câu thú vị nhé!</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            `;
+
+            unitsData.forEach(unit => {
+                html += `
+                    <div onclick="openUnit(${unit.id})" class="bg-white rounded-3xl p-6 shadow-xl border-4 ${unit.borderColor} hover:scale-105 transition transform cursor-pointer flex items-center space-x-6 relative overflow-hidden group">
+                        <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-gradient-to-br ${unit.bgGradient} opacity-10 rounded-full group-hover:scale-150 transition"></div>
+                        <div class="w-20 h-20 bg-gradient-to-tr ${unit.bgGradient} rounded-2xl flex items-center justify-center text-4xl shadow-lg transform group-hover:rotate-12 transition">
+                            ${unit.icon}
+                        </div>
+                        <div class="flex-1">
+                            <span class="text-xs font-bold px-3 py-1 bg-slate-100 text-indigo-600 rounded-full uppercase tracking-wider">Unit ${unit.id}</span>
+                            <h3 class="text-xl font-bold text-slate-800 mt-1">${unit.title.split(': ')[1]}</h3>
+                            <p class="text-sm text-slate-500 mt-1">Từ vựng & Mẫu câu tương tác</p>
+                        </div>
+                        <div class="text-2xl text-indigo-400 group-hover:translate-x-1 transition">➡️</div>
+                    </div>
+                `;
+            });
+
+            html += `</div>`;
+            main.innerHTML = html;
+        }
+
+        // --- RENDER UNIT DASHBOARD ---
+        function openUnit(unitId) {
+            const unit = unitsData.find(u => u.id === unitId);
+            const main = document.getElementById('main-content');
+
+            let html = `
+                <div class="mb-6 flex items-center justify-between">
+                    <button onclick="goToHome()" class="flex items-center space-x-2 text-indigo-600 font-bold bg-white px-4 py-2 rounded-2xl shadow hover:bg-indigo-50 transition">
+                        <span>⬅️</span> <span>Quay lại</span>
+                    </button>
+                    <span class="px-4 py-1.5 bg-gradient-to-r ${unit.bgGradient} text-white font-bold rounded-full shadow text-sm">
+                        ${unit.title}
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                    <div onclick="openVocabulary(${unitId})" class="bg-white p-6 rounded-3xl shadow-lg border-2 border-indigo-100 hover:border-indigo-400 text-center cursor-pointer transition transform hover:-translate-y-1">
+                        <div class="text-4xl mb-2">📚</div>
+                        <h4 class="font-bold text-lg text-slate-800">1. Học Từ Vựng</h4>
+                        <p class="text-xs text-slate-500 mt-1">Xem hình, nghe phát âm</p>
+                    </div>
+                    <div onclick="openSentences(${unitId})" class="bg-white p-6 rounded-3xl shadow-lg border-2 border-indigo-100 hover:border-indigo-400 text-center cursor-pointer transition transform hover:-translate-y-1">
+                        <div class="text-4xl mb-2">🗣️</div>
+                        <h4 class="font-bold text-lg text-slate-800">2. Luyện Mẫu Câu</h4>
+                        <p class="text-xs text-slate-500 mt-1">Luyện câu giao tiếp chuẩn</p>
+                    </div>
+                    <div onclick="openExerciseMissing(${unitId})" class="bg-white p-6 rounded-3xl shadow-lg border-2 border-indigo-100 hover:border-indigo-400 text-center cursor-pointer transition transform hover:-translate-y-1">
+                        <div class="text-4xl mb-2">✏️</div>
+                        <h4 class="font-bold text-lg text-slate-800">3. Điền Chữ Cái</h4>
+                        <p class="text-xs text-slate-500 mt-1">Hoàn thành từ vựng</p>
+                    </div>
+                    <div onclick="openExerciseGame(${unitId})" class="bg-white p-6 rounded-3xl shadow-lg border-2 border-indigo-100 hover:border-indigo-400 text-center cursor-pointer transition transform hover:-translate-y-1">
+                        <div class="text-4xl mb-2">🧩</div>
+                        <h4 class="font-bold text-lg text-slate-800">4. Sắp Xếp Từ</h4>
+                        <p class="text-xs text-slate-500 mt-1">Thử tài nhanh trí</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-3xl p-6 shadow-lg border-2 border-indigo-100">
+                    <h3 class="text-xl font-bold text-indigo-600 mb-4 flex items-center space-x-2">
+                        <span>🌟 Từ vựng chính trong Unit</span>
+                    </h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            `;
+
+            unit.vocabulary.forEach(item => {
+                html += `
+                    <div onclick="speakText('${item.word}')" class="${unit.lightBg} p-4 rounded-2xl text-center border-2 ${unit.borderColor} cursor-pointer hover:scale-105 transition">
+                        <div class="text-5xl mb-2">${item.icon}</div>
+                        <h4 class="font-bold text-lg text-slate-800 capitalize">${item.word}</h4>
+                        <p class="text-xs text-slate-500">${item.vietnamese}</p>
+                        <span class="inline-block mt-2 text-xs bg-white px-2.5 py-1 rounded-full font-semibold text-indigo-600 shadow-sm">🔊 Nghe</span>
+                    </div>
+                `;
+            });
+
+            html += `</div></div>`;
+            main.innerHTML = html;
+        }
+
+        // --- 1. VOCABULARY FLASHCARD VIEW ---
+        function openVocabulary(unitId) {
+            const unit = unitsData.find(u => u.id === unitId);
+            const main = document.getElementById('main-content');
+
+            let html = `
+                <div class="mb-6 flex items-center justify-between">
+                    <button onclick="openUnit(${unitId})" class="flex items-center space-x-2 text-indigo-600 font-bold bg-white px-4 py-2 rounded-2xl shadow hover:bg-indigo-50 transition">
+                        <span>⬅️</span> <span>Quay lại Unit</span>
+                    </button>
+                    <span class="text-lg font-bold text-indigo-600">📚 Flashcard Từ Vựng</span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
+            `;
+
+            unit.vocabulary.forEach((item) => {
+                html += `
+                    <div class="bg-white p-8 rounded-3xl shadow-xl border-4 ${unit.borderColor} text-center transform transition hover:scale-105">
+                        <div class="text-7xl mb-4 bouncing">${item.icon}</div>
+                        <h3 class="text-3xl font-extrabold text-slate-800 capitalize mb-1">${item.word}</h3>
+                        <p class="text-slate-500 text-lg mb-6">${item.vietnamese}</p>
+                        <button onclick="speakText('${item.word}')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 px-6 rounded-2xl shadow-md inline-flex items-center space-x-2 transition transform active:scale-95">
+                            <span>🔊 Nghe Phát Âm</span>
+                        </button>
+                    </div>
+                `;
+            });
+
+            html += `</div>`;
+            main.innerHTML = html;
+        }
+
+        // --- 2. SENTENCE PRACTICE VIEW ---
+        function openSentences(unitId) {
+            const unit = unitsData.find(u => u.id === unitId);
+            const main = document.getElementById('main-content');
+
+            let html = `
+                <div class="mb-6 flex items-center justify-between">
+                    <button onclick="openUnit(${unitId})" class="flex items-center space-x-2 text-indigo-600 font-bold bg-white px-4 py-2 rounded-2xl shadow hover:bg-indigo-50 transition">
+                        <span>⬅️</span> <span>Quay lại Unit</span>
+                    </button>
+                    <span class="text-lg font-bold text-indigo-600">🗣️ Luyện Mẫu Câu</span>
+                </div>
+
+                <div class="space-y-4 max-w-2xl mx-auto">
+            `;
+
+            unit.sentences.forEach((sent) => {
+                html += `
+                    <div class="bg-white p-6 rounded-3xl shadow-lg border-2 border-indigo-100 flex items-center justify-between">
+                        <div>
+                            <p class="text-2xl font-bold text-indigo-700 mb-1">${sent.text}</p>
+                            <p class="text-slate-500 text-sm">${sent.vietnamese}</p>
+                        </div>
+                        <button onclick="speakText('${sent.text}')" class="bg-amber-400 hover:bg-amber-500 text-white p-4 rounded-2xl shadow-md transition transform active:scale-95 text-xl">
+                            🔊
+                        </button>
+                    </div>
+                `;
+            });
+
+            html += `</div>`;
+            main.innerHTML = html;
+        }
+
+        // --- 3. EXERCISE: FILL IN MISSING LETTER ---
+        function openExerciseMissing(unitId) {
+            const unit = unitsData.find(u => u.id === unitId);
+            const main = document.getElementById('main-content');
+
+            let html = `
+                <div class="mb-6 flex items-center justify-between">
+                    <button onclick="openUnit(${unitId})" class="flex items-center space-x-2 text-indigo-600 font-bold bg-white px-4 py-2 rounded-2xl shadow hover:bg-indigo-50 transition">
+                        <span>⬅️</span> <span>Quay lại Unit</span>
+                    </button>
+                    <span class="text-lg font-bold text-indigo-600">✏️ Điền Chữ Cái Còn Thiếu</span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
+            `;
+
+            unit.exercises.missingLetter.forEach((ex, index) => {
+                let missingInputsHtml = '';
+                ex.missing.forEach((mChar, mIdx) => {
+                    missingInputsHtml += `
+                        <input type="text" id="missing-input-${index}-${mIdx}" maxlength="1" placeholder="_" 
+                            oninput="checkMultiMissing(${index}, '${ex.full}', ${JSON.stringify(ex.missing).replace(/"/g, '&quot;')})"
+                            class="w-12 h-14 text-center text-2xl font-bold uppercase border-3 border-indigo-300 rounded-xl focus:outline-none focus:border-indigo-600 bg-indigo-50 text-indigo-700 shadow-inner">
+                    `;
+                });
+
+                html += `
+                    <div id="card-missing-${index}" class="bg-white p-6 rounded-3xl shadow-lg border-2 border-indigo-100 text-center transition-all duration-300">
+                        <div class="text-5xl mb-3">${unit.vocabulary.find(v => v.word === ex.full)?.icon || '⭐'}</div>
+                        
+                        <div class="flex items-center justify-center space-x-1 text-3xl font-mono font-bold my-4">
+                            <span class="text-slate-700">${ex.prefix}</span>
+                            ${missingInputsHtml}
+                            <span class="text-slate-700">${ex.suffix}</span>
+                        </div>
+
+                        <p id="missing-feedback-${index}" class="text-sm font-semibold text-slate-400">Điền chữ cái vào ô trống</p>
+                    </div>
+                `;
+            });
+
+            html += `</div>`;
+            main.innerHTML = html;
+        }
+
+        function checkMultiMissing(index, fullWord, missingArr) {
+            let userString = "";
+            for(let i = 0; i < missingArr.length; i++) {
+                const inputElem = document.getElementById(`missing-input-${index}-${i}`);
+                if(inputElem) {
+                    userString += inputElem.value.trim().toLowerCase();
+                }
+            }
+
+            const cardElem = document.getElementById(`card-missing-${index}`);
+            const feedbackElem = document.getElementById(`missing-feedback-${index}`);
+            const correctString = missingArr.join("").toLowerCase();
+
+            if(userString.length === missingArr.length) {
+                if(userString === correctString) {
+                    for(let i = 0; i < missingArr.length; i++) {
+                        const inputElem = document.getElementById(`missing-input-${index}-${i}`);
+                        if(inputElem) {
+                            inputElem.disabled = true;
+                            inputElem.classList.remove('bg-indigo-50', 'border-indigo-300', 'text-indigo-700');
+                            inputElem.classList.add('bg-emerald-100', 'border-emerald-500', 'text-emerald-700', 'scale-110', 'transition-transform');
+                        }
+                    }
+                    if(cardElem) {
+                        cardElem.classList.remove('border-indigo-100');
+                        cardElem.classList.add('border-emerald-400', 'bg-emerald-50/50', 'shadow-xl');
+                    }
+                    if(feedbackElem) {
+                        feedbackElem.innerHTML = "🎉 Chính xác! Xuất sắc quá!";
+                        feedbackElem.className = "text-sm font-bold text-emerald-600 mt-2 pop-in";
+                    }
+
+                    addStars(1);
+                    speakText("Correct!");
+                } else {
+                    if(feedbackElem) {
+                        feedbackElem.innerHTML = "❌ Chưa đúng, thử lại nhé!";
+                        feedbackElem.className = "text-sm font-bold text-rose-500 mt-2";
+                    }
+                }
+            } else {
+                if(feedbackElem) {
+                    feedbackElem.innerHTML = "Đang điền...";
+                    feedbackElem.className = "text-sm font-semibold text-slate-400 mt-2";
+                }
+            }
+        }
+
+        // --- 4. EXERCISE: UNSCRAMBLE WORDS WITH IMAGES/ICONS ---
+        function openExerciseGame(unitId) {
+            const unit = unitsData.find(u => u.id === unitId);
+            const main = document.getElementById('main-content');
+
+            let html = `
+                <div class="mb-6 flex items-center justify-between">
+                    <button onclick="openUnit(${unitId})" class="flex items-center space-x-2 text-indigo-600 font-bold bg-white px-4 py-2 rounded-2xl shadow hover:bg-indigo-50 transition">
+                        <span>⬅️</span> <span>Quay lại Unit</span>
+                    </button>
+                    <span class="text-lg font-bold text-indigo-600">🧩 Sắp Xếp Chữ Cái</span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
+            `;
+
+            unit.exercises.unscramble.forEach((ex, index) => {
+                html += `
+                    <div id="card-unscramble-${index}" class="bg-white p-6 rounded-3xl shadow-lg border-2 border-indigo-100 text-center transition-all duration-300">
+                        <div class="text-6xl mb-2 bouncing">${ex.icon}</div>
+                        <p class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-1">${ex.hint}</p>
+                        
+                        <div class="text-4xl font-extrabold font-mono text-amber-500 tracking-widest my-3 bg-amber-50 py-3 rounded-2xl">${ex.scrambled.toUpperCase()}</div>
+                        
+                        <input type="text" id="unscramble-${index}" placeholder="Nhập từ đúng..." class="w-full text-center text-xl font-bold uppercase border-2 border-indigo-200 rounded-xl py-3 px-4 focus:outline-none focus:border-indigo-600 mb-3 bg-slate-50">
+                        
+                        <button onclick="checkUnscramble(${index}, '${ex.correct}')" class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 rounded-xl shadow transition">Xác Nhận</button>
+                        
+                        <p id="unscramble-feedback-${index}" class="text-sm mt-2 font-semibold"></p>
+                    </div>
+                `;
+            });
+
+            html += `</div>`;
+            main.innerHTML = html;
+        }
+
+        function checkUnscramble(index, correctWord) {
+            const inputElem = document.getElementById(`unscramble-${index}`);
+            const cardElem = document.getElementById(`card-unscramble-${index}`);
+            const userVal = inputElem.value.trim().toLowerCase();
+            const feedback = document.getElementById(`unscramble-feedback-${index}`);
+
+            if (userVal === correctWord.toLowerCase()) {
+                inputElem.disabled = true;
+                inputElem.classList.add('bg-emerald-100', 'border-emerald-500', 'text-emerald-700');
+                cardElem.classList.remove('border-indigo-100');
+                cardElem.classList.add('border-emerald-400', 'bg-emerald-50/50', 'shadow-xl');
+
+                feedback.innerHTML = "🌟 Xuất sắc! Thêm 1 ngôi sao ⭐";
+                feedback.className = "text-sm mt-2 font-bold text-green-600 pop-in";
+                addStars(1);
+                speakText("Wonderful!");
+            } else {
+                feedback.innerHTML = "❌ Thử lại nha bé ơi!";
+                feedback.className = "text-sm mt-2 font-semibold text-rose-500";
+                speakText("Try again");
+            }
+        }
+
+        // Initial Load
+        window.onload = function() {
+            goToHome();
+        };
+    </script>
+</body>
+</html>
